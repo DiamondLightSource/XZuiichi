@@ -42,4 +42,5 @@ else:
     exit(0)
 
 #this works now, need to work on getting the input/output logged.
-subprocess.run(["xscale_par"])
+#subprocess.run(["xscale_par"])
+print("I'm pretending to run xscale_par...")
