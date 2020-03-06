@@ -41,5 +41,5 @@ if cont == "y":
 else:
     exit(0)
 
-subprocess.run(["module load xds"])
+#subprocess.run(["module load xds"])
 subprocess.run(["xscale_par"])
