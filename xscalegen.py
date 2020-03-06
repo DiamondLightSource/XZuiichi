@@ -5,6 +5,7 @@ Created on Mon Dec 16 16:46:33 2019
 
 @author: christianorr
 """
+import subprocess
 
 defaults = ("OUTPUT_FILE=XSCALE.HKL",
 "RESOLUTION_SHELLS=20 10 8 6 4 3 2.5 2.2 2.1 2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1",
@@ -39,3 +40,6 @@ if cont == "y":
     print("Moving on...")
 else:
     exit(0)
+
+subprocess.run(["module load xds"])
+subprocess.run(["xscale_par"])
