@@ -33,7 +33,7 @@ for i in range(inpnumber):
     xscaleinp.write("\n")
 xscaleinp.close()
 
-print("Modify XSCALE.INP file with the correct paths")
+print("Modify XSCALE.INP file with the correct paths and options")
 
 cont = input("Okay to continue? (y/n): ")
 if cont == "y":
@@ -41,5 +41,5 @@ if cont == "y":
 else:
     exit(0)
 
-#subprocess.run(["module load xds"])
+#this works now, need to work on getting the input/output logged.
 subprocess.run(["xscale_par"])
