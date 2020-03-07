@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Dec 16 16:46:33 2019
-
 @author: christianorr
 """
 import subprocess
+import time
+
+inpnumber = input("How many datasets are there? ")
+inpnumberstatic = inpnumber
+inpnumberstaticint = int(inpnumber)
+inpnumber = int(inpnumber)
+inpnumberline = inpnumber
+inpline = ("INPUT_FILE=")
 
 defaults = ("OUTPUT_FILE=XSCALE.HKL",
-"RESOLUTION_SHELLS=20 10 8 6 4 3 2.5 2.2 2.1 2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1",
+"RESOLUTION_SHELLS=10 5 4 3.6 3.4 3.2 3 2.8 2.6 2.5 2.4 2.3 2.2 2.1 2 1.9 1.8 1.7",
 "!INCLUDE_RESOLUTION_RANGE=",
 "!MERGE=TRUE",
 "!FRIEDEL'S_LAW=FALSE",
 "!REFLECTIONS/CORRECTION_FACTOR=50",
 "!STRICT_ABSORPTION_CORRECTION=TRUE")
-
-inpnumber = input("How many datasets are there? ")
-inpnumber = int(inpnumber)
-inpline = ("INPUT_FILE=../")
 
 xscaleinp = open("XSCALE.INP","w")
     
@@ -28,12 +30,23 @@ xscaleinp.close()
 
 xscaleinp = open("XSCALE.INP","a")
 
-for i in range(inpnumber):
+while (inpnumberline > 0):
+    inpnumberline = inpnumberline - 1
+    dataline = input("Enter dataset: ")
+    xscaleinp = open("XSCALE.INP","a")
     xscaleinp.write(inpline)
+    xscaleinp.write(dataline)
     xscaleinp.write("\n")
-xscaleinp.close()
+    xscaleinp.close()
+else:
+    print("done")
+    
+#for i in range(inpnumber):
+#    xscaleinp.write(inpline)
+#    xscaleinp.write("\n")
+#xscaleinp.close()
 
-print("Modify XSCALE.INP file with the correct paths and options")
+print("Check XSCALE.INP...")
 
 cont = input("Okay to continue? (y/n): ")
 if cont == "y":
@@ -41,6 +54,19 @@ if cont == "y":
 else:
     exit(0)
 
-#this works now, need to work on getting the input/output logged.
-#subprocess.run(["xscale_par"])
-print("I'm pretending to run xscale_par...")
+count = 1
+while (inpnumber > 0):
+    inpnumber = inpnumber - 1
+    #print("placeholder for xscale_par")
+    subprocess.run(["xscale_par"])
+    time.sleep(3)
+    count = count + 1
+    counter = count - 1
+    counter = str(counter)
+    if (count <= inpnumberstaticint):    
+        print(counter + " of " + inpnumberstatic) 
+    else:
+        print("XSCALE complete")
+else:
+    print("Processing finished")
+    
