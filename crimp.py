@@ -6,6 +6,10 @@
 import subprocess
 import time
 import sys
+import os
+
+path = os.getcwd()
+print(path)
 
 inpnumber = input("How many datasets are there? ")
 inpnumberstatic = inpnumber
@@ -17,6 +21,7 @@ inpline = ("INPUT_FILE=")
 if (inpnumber > 1):
     print("")
 else:
+    print("There is no point running crimp with only 1 input file...")
     sys.exit()
 
 defaults = ("OUTPUT_FILE=XSCALE.HKL",
@@ -33,6 +38,11 @@ for line in defaults:
     xscaleinp.write(line)
     xscaleinp.write("\n")
 xscaleinp.close()
+
+xscaleout = open("XSCALEOUT.LP","w")
+xscaleout.write("Welcome to crimp!")
+xscaleout.write("\n")
+xscaleout.close()
 
 xscaleinp = open("XSCALE.INP","a")
 
@@ -65,7 +75,18 @@ while (inpnumber > 0):
     inpnumber = inpnumber - 1
     print("placeholder for xscale_par")
     #subprocess.run(["xscale_par"])
-    time.sleep(3)
+    xscalelp = open("XSCALE.LP","r")
+    xscaleout = open("XSCALEOUT.LP","a")
+    xscaleout.write(xscalelp.read())
+    xscaleout.close()
+    xscalelp.close()
+    time.sleep(10)
+    readFile = open("XSCALE.INP")
+    lines = readFile.readlines()
+    readFile.close()
+    xscaleinp = open("XSCALE.INP","w")
+    xscaleinp.writelines([item for item in lines[:-1]])
+    xscaleinp.close()
     count = count + 1
     counter = count - 1
     counter = str(counter)
