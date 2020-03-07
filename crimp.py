@@ -5,6 +5,7 @@
 """
 import subprocess
 import time
+import sys
 
 inpnumber = input("How many datasets are there? ")
 inpnumberstatic = inpnumber
@@ -12,6 +13,11 @@ inpnumberstaticint = int(inpnumber)
 inpnumber = int(inpnumber)
 inpnumberline = inpnumber
 inpline = ("INPUT_FILE=")
+
+if (inpnumber > 1):
+    print("")
+else:
+    sys.exit()
 
 defaults = ("OUTPUT_FILE=XSCALE.HKL",
 "RESOLUTION_SHELLS=10 5 4 3.6 3.4 3.2 3 2.8 2.6 2.5 2.4 2.3 2.2 2.1 2 1.9 1.8 1.7",
@@ -52,13 +58,13 @@ cont = input("Okay to continue? (y/n): ")
 if cont == "y":
     print("Moving on...")
 else:
-    exit(0)
+    sys.exit()
 
 count = 1
 while (inpnumber > 0):
     inpnumber = inpnumber - 1
-    #print("placeholder for xscale_par")
-    subprocess.run(["xscale_par"])
+    print("placeholder for xscale_par")
+    #subprocess.run(["xscale_par"])
     time.sleep(3)
     count = count + 1
     counter = count - 1
