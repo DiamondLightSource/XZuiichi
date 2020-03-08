@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar  8 14:30:04 2020
+
+@author: vwg85559
+"""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -46,17 +53,17 @@ xscaleout.write("\n")
 xscaleout.close()
 
 #Write the XSCALE input from user input
-xscalePrep = open("XSCALEPREP.INP","w")
+xscaleinp = open("XSCALE.INP","a")
 while (inpnumberline > 0):
     inpnumberline = inpnumberline - 1
     dataline = input("Enter dataset: ")
-    xscalePrep = open("XSCALEPREP.INP","a")
-    xscalePrep.write(inpline)
-    xscalePrep.write(dataline)
-    xscalePrep.write("\n")
-    xscalePrep.close()
+    xscaleinp = open("XSCALE.INP","a")
+    xscaleinp.write(inpline)
+    xscaleinp.write(dataline)
+    xscaleinp.write("\n")
+    xscaleinp.close()
 else:
-    print("That's all the inputs I am expecting!")
+    print("done")
     
 #for i in range(inpnumber):
 #    xscaleinp.write(inpline)
@@ -70,40 +77,31 @@ if cont == "y":
     print("Moving on...")
 else:
     sys.exit()
-    
-def readLines(fName):
-    with open (fName, "r") as myfile:
-        data=myfile.readlines()
-        print(data)
-        
-readLines("XSCALE.INP")
 
 #Run XSCALE on input file and log output, delete last line of input file, repeat
-# =============================================================================
-# count = 1
-# while (inpnumber > 0):
-#     inpnumber = inpnumber - 1
-#     print("placeholder for xscale_par")     #just for testing
-# #    subprocess.run(["xscale_par"])     #remove '#' after testing
-#     xscalelp = open("XSCALE.LP","r")
-#     xscaleout = open("XSCALEOUT.LP","a")
-#     xscaleout.write(xscalelp.read())
-#     xscaleout.close()
-#     xscalelp.close()
-#     time.sleep(3)   #just for testing
-#     readFile = open("XSCALE.INP")
-#     lines = readFile.readlines()
-#     readFile.close()
-#     xscaleinp = open("XSCALE.INP","w")
-#     xscaleinp.writelines([item for item in lines[:-1]])
-#     xscaleinp.close()
-#     count = count + 1
-#     counter = count - 1
-#     counter = str(counter)
-#     if (count <= inpnumberstaticint):    
-#         print(counter + " of " + inpnumberstatic) 
-#     else:
-#         print("XSCALE complete")
-# else:
-#     print("Processing finished")
-# =============================================================================
+count = 1
+while (inpnumber > 0):
+    inpnumber = inpnumber - 1
+    print("placeholder for xscale_par")     #just for testing
+#    subprocess.run(["xscale_par"])     #remove '#' after testing
+    xscalelp = open("XSCALE.LP","r")
+    xscaleout = open("XSCALEOUT.LP","a")
+    xscaleout.write(xscalelp.read())
+    xscaleout.close()
+    xscalelp.close()
+    time.sleep(3)   #just for testing
+    readFile = open("XSCALE.INP")
+    lines = readFile.readlines()
+    readFile.close()
+    xscaleinp = open("XSCALE.INP","w")
+    xscaleinp.writelines([item for item in lines[:-1]])
+    xscaleinp.close()
+    count = count + 1
+    counter = count - 1
+    counter = str(counter)
+    if (count <= inpnumberstaticint):    
+        print(counter + " of " + inpnumberstatic) 
+    else:
+        print("XSCALE complete")
+else:
+    print("Processing finished")
