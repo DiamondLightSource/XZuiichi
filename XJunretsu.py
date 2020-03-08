@@ -4,13 +4,19 @@
 @author: christianorr
 """
 import subprocess
-import time #used in testing
 import sys
 import os
+import time
+from itertools import combinations
+
+# Python3 code to convert tuple into string 
+def convertTuple(tup): 
+    str =  ''.join(tup) 
+    return str
 
 #Setup - probably a neater way of doing this...
 path = os.getcwd()
-print(path)
+print("You are here: " + path)
 inpnumber = input("How many datasets are there? ")
 inpnumberstatic = inpnumber
 inpnumberstaticint = int(inpnumber)
@@ -33,15 +39,10 @@ defaults = ("OUTPUT_FILE=XSCALE.HKL",
 "!FRIEDEL'S_LAW=FALSE",
 "!REFLECTIONS/CORRECTION_FACTOR=50",
 "!STRICT_ABSORPTION_CORRECTION=TRUE")
-xscaleinp = open("XSCALE.INP","w")    
-for line in defaults:
-    xscaleinp.write(line)
-    xscaleinp.write("\n")
-xscaleinp.close()
 
 #Set up the output log file
 xscaleout = open("XSCALEOUT.LP","w")
-xscaleout.write("Welcome to crimp!")
+xscaleout.write("Welcome to XYZ!")
 xscaleout.write("\n")
 xscaleout.close()
 
@@ -57,11 +58,6 @@ while (inpnumberline > 0):
     xscalePrep.close()
 else:
     print("That's all the inputs I am expecting!")
-    
-#for i in range(inpnumber):
-#    xscaleinp.write(inpline)
-#    xscaleinp.write("\n")
-#xscaleinp.close()
 
 print("Check XSCALE.INP...")
 
@@ -71,39 +67,28 @@ if cont == "y":
 else:
     sys.exit()
     
-def readLines(fName):
-    with open (fName, "r") as myfile:
-        data=myfile.readlines()
-        print(data)
-        
-readLines("XSCALE.INP")
+#Prep input for permutations
+xscalePrep = open("XSCALEPREP.INP")
+lineprep = xscalePrep.readlines()
+print(lineprep)
+print(len(lineprep))
+print("")
 
-#Run XSCALE on input file and log output, delete last line of input file, repeat
-# =============================================================================
-# count = 1
-# while (inpnumber > 0):
-#     inpnumber = inpnumber - 1
-#     print("placeholder for xscale_par")     #just for testing
-# #    subprocess.run(["xscale_par"])     #remove '#' after testing
-#     xscalelp = open("XSCALE.LP","r")
-#     xscaleout = open("XSCALEOUT.LP","a")
-#     xscaleout.write(xscalelp.read())
-#     xscaleout.close()
-#     xscalelp.close()
-#     time.sleep(3)   #just for testing
-#     readFile = open("XSCALE.INP")
-#     lines = readFile.readlines()
-#     readFile.close()
-#     xscaleinp = open("XSCALE.INP","w")
-#     xscaleinp.writelines([item for item in lines[:-1]])
-#     xscaleinp.close()
-#     count = count + 1
-#     counter = count - 1
-#     counter = str(counter)
-#     if (count <= inpnumberstaticint):    
-#         print(counter + " of " + inpnumberstatic) 
-#     else:
-#         print("XSCALE complete")
-# else:
-#     print("Processing finished")
-# =============================================================================
+#Loop through all combinations
+for size in range(2,len(lineprep)+1):
+    for i in combinations(lineprep,size):
+        toRun = convertTuple(i)
+        xscaleinp = open("XSCALE.INP","w")    
+        for line in defaults:
+            xscaleinp.write(line)
+            xscaleinp.write("\n")
+        xscaleinp.write(toRun)
+        xscaleinp.close()
+        subprocess.run(["xscale_par"])
+        xscalelp = open("XSCALE.LP","r")
+        xscaleout = open("XSCALEOUT.LP","a")
+        xscaleout.write(xscalelp.read())
+        xscaleout.close()
+        xscalelp.close()
+        
+        

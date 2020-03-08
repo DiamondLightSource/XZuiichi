@@ -17,7 +17,7 @@ import os
 
 #Setup - probably a neater way of doing this...
 path = os.getcwd()
-print(path)
+print("You are here: " + path)
 inpnumber = input("How many datasets are there? ")
 inpnumberstatic = inpnumber
 inpnumberstaticint = int(inpnumber)
