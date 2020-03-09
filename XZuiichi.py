@@ -6,8 +6,8 @@
 import subprocess
 import sys
 import os
-import time
 from itertools import combinations
+from itertools import islice
 
 # Python3 code to convert tuple into string 
 def convertTuple(tup): 
@@ -85,10 +85,30 @@ for size in range(2,len(lineprep)+1):
         xscaleinp.write(toRun)
         xscaleinp.close()
         subprocess.run(["xscale_par"])
-        xscalelp = open("XSCALE.LP","r")
-        xscaleout = open("XSCALEOUT.LP","a")
-        xscaleout.write(xscalelp.read())
-        xscaleout.close()
-        xscalelp.close()
+        with open(path + "/XSCALE.LP", "r") as f:
+            for line in f:
+                if line == "CONTROL CARDS":
+                    xscaleout = open("XSCALEOUT.LP","a")
+                    xscaleout.write(''.join(islice(f, 8)))
+                    xscaleout.close()
         
+        
+        #=======================================================================
+        # with open(path + '/XSCALE.LP', 'r') as f:
+        #     for line in f:
+        #         if line == 'CONTROL CARDS\n':
+        #             for i in range(8):
+        #                 print(next(lines).strip())
+        
+         
+
+        
+        #=======================================================================
+        # xscalelp = open("XSCALE.LP","r")
+        # xscaleout = open("XSCALEOUT.LP","a")
+        # xscaleout.write(xscalelp.read())
+        # xscaleout.close()
+        # xscalelp.close()
+        # 
+        #=======================================================================
         
