@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  8 14:30:04 2020
-
-@author: vwg85559
-"""
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -82,8 +75,8 @@ else:
 count = 1
 while (inpnumber > 0):
     inpnumber = inpnumber - 1
-    print("placeholder for xscale_par")     #just for testing
-#    subprocess.run(["xscale_par"])     #remove '#' after testing
+#    print("placeholder for xscale_par")     #just for testing
+    subprocess.run(["xscale_par"])     #remove '#' after testing
     xscalelp = open("XSCALE.LP","r")
     xscaleout = open("XSCALEOUT.LP","a")
     xscaleout.write(xscalelp.read())
