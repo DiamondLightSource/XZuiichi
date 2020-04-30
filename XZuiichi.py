@@ -33,11 +33,11 @@ else:
 
 #Write default XSCALE.INP commands -  can make this customisable in future
 defaults = ("OUTPUT_FILE=XSCALE.HKL",
-"RESOLUTION_SHELLS=10 5 4 3.6 3.4 3.2 3 2.8 2.6 2.5 2.4 2.3 2.2 2.1 2 1.9 1.8 1.7",
+"RESOLUTION_SHELLS=10 5 4 3.8 3.6 3.4 3.2 3 2.8 2.6 2.5 2.4 2.3 2.2 2.1 2.0",
 "!INCLUDE_RESOLUTION_RANGE=",
 "!MERGE=TRUE",
 "FRIEDEL'S_LAW=FALSE",
-"!REFLECTIONS/CORRECTION_FACTOR=50",
+"REFLECTIONS/CORRECTION_FACTOR=10",
 "!STRICT_ABSORPTION_CORRECTION=TRUE")
 
 #Set up the output log file
@@ -85,12 +85,18 @@ for size in range(2,len(lineprep)+1):
         xscaleinp.write(toRun)
         xscaleinp.close()
         subprocess.run(["xscale_par"])
-        with open(path + "/XSCALE.LP", "r") as f:
-            for line in f:
-                if line == "CONTROL CARDS":
-                    xscaleout = open("XSCALEOUT.LP","a")
-                    xscaleout.write(''.join(islice(f, 8)))
-                    xscaleout.close()
+        xscalelp = open("XSCALE.LP","r")
+        xscaleout = open("XSCALEOUT.LP","a")
+        xscaleout.write(xscalelp.read())
+        xscaleout.close()
+        xscalelp.close()
+
+        #with open(path + "/XSCALE.LP", "r") as f:
+        #    for line in f:
+        #        if line == "CONTROL CARDS":
+        #            xscaleout = open("XSCALEOUT.LP","a")
+        #            xscaleout.write(''.join(islice(f, 8)))
+        #            xscaleout.close()
         
         
         #=======================================================================
@@ -104,11 +110,7 @@ for size in range(2,len(lineprep)+1):
 
         
         #=======================================================================
-        # xscalelp = open("XSCALE.LP","r")
-        # xscaleout = open("XSCALEOUT.LP","a")
-        # xscaleout.write(xscalelp.read())
-        # xscaleout.close()
-        # xscalelp.close()
+
         # 
         #=======================================================================
         
