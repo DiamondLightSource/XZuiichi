@@ -1,5 +1,10 @@
 
 XSCALE.INP
+xscale_comb.py
+XSCALE.LP
+XSCALEOUT.LP
+XSCALEPERM.INP
+XSCALEPREP.INP
 .project
 .pydevproject
 .settings
