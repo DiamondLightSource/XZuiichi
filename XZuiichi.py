@@ -14,6 +14,17 @@ def convertTuple(tup):
     str =  ''.join(tup) 
     return str
 
+print("""
+__   __ ______      _ _      _     _
+\ \ / /|___  /     (_|_)    | |   (_)
+ \ V /    / / _   _ _ _  ___| |__  _
+ /   \   / / | | | | | |/ __| '_ \| |
+/ /^\ \./ /__| |_| | | | (__| | | | |
+\/   \/\_____/\__,_|_|_|\___|_| |_|_|
+
+              C ORR 2019
+              """)
+
 #Setup - probably a neater way of doing this...
 path = os.getcwd()
 print("You are here: " + path)
