@@ -26,12 +26,12 @@ __   __ ______      _ _      _     _
 path = os.getcwd()
 print("You are here: " + path)
 cut_or_comb = input("""XZuiichi can test all possible (c)ombinations of the
-                    data or systematically (r)emove them in reverse order
-                    to analyse where signal drops. Type c for the
-                    combination option (takes MUCH longer for lots of data
-                    sets, best not to include more than 14 as this will
-                    take weeks+). Type r for the systematic removal
-                    option. """).lower
+data or systematically (r)emove them in reverse order
+to analyse where signal drops. Type c for the
+combination option (takes MUCH longer for lots of data
+sets, best not to include more than 14 as this will
+take weeks+). Type r for the systematic removal
+option. """).lower
 inpnumber = int(input("How many datasets are there? "))
 inpnumberstatic = inpnumber
 inpline = ("INPUT_FILE=")
@@ -74,7 +74,7 @@ else:
     inpnumber = inpnumberstatic
     print("That's all the inputs I am expecting!")
 
-with open(dataline) as infile:
+with open(dataline,'r') as infile:
         for line in infile:
             if line.startswith("!SPACE_GROUP_NUMBER="):
                 words = line.split()
