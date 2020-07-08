@@ -25,13 +25,13 @@ __   __ ______      _ _      _     _
 #Setup - probably a neater way of doing this...
 path = os.getcwd()
 print("You are here: " + path)
-cut_or_comb = input("XZuiichi can test all possible (c)ombinations of the \
-                    data or systematically (r)emove them in reverse order \
-                    to analyse where signal drops. Type c for the \
-                    combination option (takes MUCH longer for lots of data \
-                    sets, best not to include more than 14 as this will\
-                    take weeks+). Type r for the systematic removal \
-                    option. *** ").lower
+cut_or_comb = input("""XZuiichi can test all possible (c)ombinations of the
+                    data or systematically (r)emove them in reverse order
+                    to analyse where signal drops. Type c for the
+                    combination option (takes MUCH longer for lots of data
+                    sets, best not to include more than 14 as this will
+                    take weeks+). Type r for the systematic removal
+                    option. """).lower
 inpnumber = int(input("How many datasets are there? "))
 inpnumberstatic = inpnumber
 inpline = ("INPUT_FILE=")
@@ -107,7 +107,7 @@ print("Using a reflection/correction factor of "+str(ref_corr_fact))
 defaults = ("OUTPUT_FILE=XSCALE.HKL",
 shells,
 "FRIEDEL'S_LAW=FALSE",
-"REFLECTIONS/CORRECTION_FACTOR="+ref_corr_fact,
+"REFLECTIONS/CORRECTION_FACTOR="+str(ref_corr_fact),
 "STRICT_ABSORPTION_CORRECTION=TRUE")
     
 #Prep input for permutations
