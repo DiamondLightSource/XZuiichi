@@ -12,11 +12,12 @@ from itertools import combinations
 
 
 def convertTuple(tup):
-    str = ''.join(tup)
+    str = "".join(tup)
     return str
 
 
-print("""
+print(
+    """
 __   __ ______      _ _      _     _
 \ \ / /|___  /     (_|_)    | |   (_)
  \ V /    / / _   _ _ _  ___| |__  _
@@ -25,47 +26,72 @@ __   __ ______      _ _      _     _
 \/   \/\_____/\__,_|_|_|\___|_| |_|_|
 
               C ORR 2019
-              """)
+              """
+)
 
 # Setup - probably a neater way of doing this...
 path = os.getcwd()
 print("You are here: " + path)
-print("""XZuiichi can test all possible (c)ombinations of the
+print(
+    """XZuiichi can test all possible (c)ombinations of the
 data or systematically (r)emove them in reverse order
 to analyse where signal drops. Type c for the
 combination option (takes MUCH longer for lots of data
 sets, best not to include more than 14 as this will
 take weeks+). Type r for the systematic removal
-option. """)
+option. """
+)
 cut_or_comb = input("c or r? ").lower()
 inpnumber = int(input("How many datasets are there? "))
 inpnumberstatic = inpnumber
-inpline = ("INPUT_FILE=")
+inpline = "INPUT_FILE="
 
 # Kill script if only one dataset to be given
-if (inpnumber > 1):
+if inpnumber > 1:
     print("")
 else:
     print("There is no point running XZuiichi with only 1 input file...")
     sys.exit()
 
 res = float(input("Resolution cutoff: "))
-resgaps = ((5 - res) / 11)
-shells = ("10 5 " + str(round((res+(10 * resgaps)), 1)) + " " +
-          str(round((res + (9 * resgaps)), 1)) + " " +
-          str(round((res + (8 * resgaps)), 1)) + " " +
-          str(round((res + (7 * resgaps)), 1)) + " " +
-          str(round((res + (6 * resgaps)), 1)) + " " +
-          str(round((res + (5 * resgaps)), 1)) + " " +
-          str(round((res + (4 * resgaps)), 1)) + " " +
-          str(round((res + (3 * resgaps)), 1)) + " " +
-          str(round((res + (2 * resgaps)), 1)) + " " +
-          str(round((res + resgaps), 1)) + " " + str(round(res, 1)))
-print("Because you gave a resolution of " + str(res) +
-      " the resolution shells used are: "+str(shells))
+resgaps = (5 - res) / 11
+shells = (
+    "10 5 "
+    + str(round((res + (10 * resgaps)), 1))
+    + " "
+    + str(round((res + (9 * resgaps)), 1))
+    + " "
+    + str(round((res + (8 * resgaps)), 1))
+    + " "
+    + str(round((res + (7 * resgaps)), 1))
+    + " "
+    + str(round((res + (6 * resgaps)), 1))
+    + " "
+    + str(round((res + (5 * resgaps)), 1))
+    + " "
+    + str(round((res + (4 * resgaps)), 1))
+    + " "
+    + str(round((res + (3 * resgaps)), 1))
+    + " "
+    + str(round((res + (2 * resgaps)), 1))
+    + " "
+    + str(round((res + resgaps), 1))
+    + " "
+    + str(round(res, 1))
+)
+print(
+    "Because you gave a resolution of "
+    + str(res)
+    + " the resolution shells used are: "
+    + str(shells)
+)
 print("")
-quality = int(input("""Score the diffraction quality 1-3
-                    (1 is bad, 2 is okay, 3 is amazing): """))
+quality = int(
+    input(
+        """Score the diffraction quality 1-3
+                    (1 is bad, 2 is okay, 3 is amazing): """
+    )
+)
 
 # Set up the output log file
 xscaleout = open("XSCALEOUT.LP", "w")
@@ -74,7 +100,7 @@ xscaleout.close()
 
 # Write the XSCALE input from user input
 xscalePrep = open("XSCALEPREP.INP", "w")
-while (inpnumber > 0):
+while inpnumber > 0:
     inpnumber = inpnumber - 1
     dataline = input("Enter dataset: ")
     xscalePrep = open("XSCALEPREP.INP", "a")
@@ -86,7 +112,7 @@ else:
     inpnumber = inpnumberstatic
     print("That's all the inputs I am expecting!")
 
-with open(dataline, 'r') as infile:
+with open(dataline, "r") as infile:
     for line in infile:
         if line.startswith("!SPACE_GROUP_NUMBER="):
             words = line.split()
@@ -113,14 +139,16 @@ if wavelen > 3:
     wav = 2
 
 ref_corr_fact = sym * wav * quality * 3
-print("Using a reflection/correction factor of "+str(ref_corr_fact))
+print("Using a reflection/correction factor of " + str(ref_corr_fact))
 
 # Write default XSCALE.INP commands -  can make this customisable in future
-defaults = ("OUTPUT_FILE=XSCALE.HKL",
-            "RESOLUTION_SHELLS="+str(shells),
-            "FRIEDEL'S_LAW=FALSE",
-            "REFLECTIONS/CORRECTION_FACTOR="+str(ref_corr_fact),
-            "STRICT_ABSORPTION_CORRECTION=TRUE")
+defaults = (
+    "OUTPUT_FILE=XSCALE.HKL",
+    "RESOLUTION_SHELLS=" + str(shells),
+    "FRIEDEL'S_LAW=FALSE",
+    "REFLECTIONS/CORRECTION_FACTOR=" + str(ref_corr_fact),
+    "STRICT_ABSORPTION_CORRECTION=TRUE",
+)
 
 # Prep input for permutations
 if cut_or_comb == "c":
@@ -159,7 +187,7 @@ if cut_or_comb == "r":
     xscaleinp.write(infiles.read())
     infiles.close()
     xscaleinp.close()
-    while (inpnumber > 0):
+    while inpnumber > 0:
         inpnumber = inpnumber - 1
         subprocess.run(["xscale_par"])
         xscalelp = open("XSCALE.LP", "r")
