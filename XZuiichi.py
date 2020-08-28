@@ -7,14 +7,13 @@ import subprocess
 import sys
 import os
 from itertools import combinations
+from pathlib import Path
+
 
 # Python3 code to convert tuple into string
-
-
 def convertTuple(tup):
     str = "".join(tup)
     return str
-
 
 print(
     """
@@ -29,10 +28,16 @@ __   __ ______      _ _      _     _
               """
 )
 
+hkl_list = list(Path("../").rglob("*.[H][K][L]"))
+print(hkl_list)
+
 # Setup - probably a neater way of doing this...
+os.system("module load xds")
 path = os.getcwd()
+p = Path(path)
+os.system('find ' + str(p.parent) + ' "XDS_ASCII.HKL" -type f -not -path "*/\.*" | sort')
 print("You are here: " + path)
-print(
+print( 
     """XZuiichi can test all possible (c)ombinations of the
 data or systematically (r)emove them in reverse order
 to analyse where signal drops. Type c for the
@@ -52,33 +57,24 @@ if inpnumber > 1:
 else:
     print("There is no point running XZuiichi with only 1 input file...")
     sys.exit()
-
 res = float(input("Resolution cutoff: "))
 resgaps = (5 - res) / 11
-shells = (
-    "10 5 "
-    + str(round((res + (10 * resgaps)), 1))
-    + " "
-    + str(round((res + (9 * resgaps)), 1))
-    + " "
-    + str(round((res + (8 * resgaps)), 1))
-    + " "
-    + str(round((res + (7 * resgaps)), 1))
-    + " "
-    + str(round((res + (6 * resgaps)), 1))
-    + " "
-    + str(round((res + (5 * resgaps)), 1))
-    + " "
-    + str(round((res + (4 * resgaps)), 1))
-    + " "
-    + str(round((res + (3 * resgaps)), 1))
-    + " "
-    + str(round((res + (2 * resgaps)), 1))
-    + " "
-    + str(round((res + resgaps), 1))
-    + " "
-    + str(round(res, 1))
+res1, res2, res3, res4, res5, res6, res7, res8, res9, res10, res11, res12, res13 = (
+    10.0,
+    5.0,
+    round((res + (10 * resgaps)), 1),
+    round((res + (9 * resgaps)), 1),
+    round((res + (8 * resgaps)), 1),
+    round((res + (7 * resgaps)), 1),
+    round((res + (6 * resgaps)), 1),
+    round((res + (5 * resgaps)), 1),
+    round((res + (4 * resgaps)), 1),
+    round((res + (3 * resgaps)), 1),
+    round((res + (2 * resgaps)), 1),
+    round((res + resgaps), 1),
+    round(res, 1),
 )
+shells = ("10 5 " + str(res3) + " " + str(res4) + " " + str(res5) + " " + str(res6) + " " + str(res7) + " " + str(res8) + " " + str(res9) + " " + str(res10) + " " + str(res11) + " " + str(res12) + " " + str(res13))
 print(
     "Because you gave a resolution of "
     + str(res)
@@ -157,7 +153,7 @@ if cut_or_comb == "c":
     print(lineprep)
     print(len(lineprep))
     print("")
-
+xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
 # Loop through all combinations
 if cut_or_comb == "c":
     for size in range(2, len(lineprep) + 1):
