@@ -14,7 +14,7 @@ print(lp)
 def analyse(lp_file, res):
     with open (lp_file, 'r') as file, open((os.path.join(path, 'tempout.csv')), 'w') as out:
         for line in file:
-            if line.startswith(str(res) + "0"):
+            if line.lstrip().startswith(str(res) + '0'):
                 out.write(','.join(line.split()) + '\n')
     with open((os.path.join(path, 'tempout.csv')), 'r') as file:
         dataline = file.read().splitlines(True)
@@ -24,4 +24,4 @@ def analyse(lp_file, res):
 reslist = [res1, res2, res3, res4, res5, res6, res7, res8, res9, res10, res11, res12, res13]
 
 for i in reslist:
-    analyse(lp, reslist)
+    analyse(lp, i)
