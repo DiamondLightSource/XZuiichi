@@ -8,6 +8,7 @@ import sys
 import os
 from itertools import combinations
 from pathlib import Path
+import pandas as pd
 
 
 # Python3 code to convert tuple into string
@@ -46,7 +47,6 @@ sets, best not to include more than 14 as this will
 take weeks+). Type r for the systematic removal
 option. """
 )
-cut_or_comb = input("c or r? ").lower()
 inpnumber = int(input("How many datasets are there? "))
 inpnumberstatic = inpnumber
 inpline = "INPUT_FILE="
