@@ -171,6 +171,7 @@ if cut_or_comb == "c":
 
 # Loop through all combinations
 if cut_or_comb == "c":
+    n = 1
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
             toRun = convertTuple(i)
@@ -181,16 +182,17 @@ if cut_or_comb == "c":
             xscaleinp.write(toRun)
             xscaleinp.close()
             ref = open("LIST_REF.OUT", "a")
-            ref.write(str(size )+ "\n")
+            ref.write(str(n)+ "\n")
             ref.write(toRun + "\n")
             subprocess.run(["xscale_par"])
             xscalelp = open("XSCALE.LP", "r")
             for j in reslist:
-                analyse("XSCALE.LP", j, size)
+                analyse("XSCALE.LP", j, n)
             xscaleout = open("XSCALEOUT.LP", "a")
             xscaleout.write(xscalelp.read())
             xscaleout.close()
             xscalelp.close()
+            n = n + 1
 
 # XSCALE on input file and log output, delete last line of input file, repeat
 if cut_or_comb == "r":
