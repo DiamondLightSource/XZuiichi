@@ -9,12 +9,25 @@ import os
 from itertools import combinations
 from pathlib import Path
 import pandas as pd
+import shutil
 
 
 # Python3 code to convert tuple into string
 def convertTuple(tup):
     str = "".join(tup)
     return str
+
+
+def analyse(lp_file, res, name):
+    with open (lp_file, 'r') as file, open((os.path.join(path, 'tempout.csv')), 'w') as out:
+        for line in file:
+            if line.lstrip().startswith(str(res) + '0'):
+                out.write(','.join(line.split()) + '\n')
+    with open((os.path.join(path, 'tempout.csv')), 'r') as file:
+        dataline = file.read().splitlines(True)
+    with open((os.path.join(path, name + '.csv')), 'a') as file:
+        file.writelines(dataline[:1])
+
 
 print(
     """
@@ -50,6 +63,7 @@ option. """
 inpnumber = int(input("How many datasets are there? "))
 inpnumberstatic = inpnumber
 inpline = "INPUT_FILE="
+cut_or_comb = "c"
 
 # Kill script if only one dataset to be given
 if inpnumber > 1:
@@ -74,6 +88,7 @@ res1, res2, res3, res4, res5, res6, res7, res8, res9, res10, res11, res12, res13
     round((res + resgaps), 1),
     round(res, 1),
 )
+reslist = [res1, res2, res3, res4, res5, res6, res7, res8, res9, res10, res11, res12, res13]
 shells = ("10 5 " + str(res3) + " " + str(res4) + " " + str(res5) + " " + str(res6) + " " + str(res7) + " " + str(res8) + " " + str(res9) + " " + str(res10) + " " + str(res11) + " " + str(res12) + " " + str(res13))
 print(
     "Because you gave a resolution of "
@@ -107,7 +122,6 @@ while inpnumber > 0:
 else:
     inpnumber = inpnumberstatic
     print("That's all the inputs I am expecting!")
-
 with open(dataline, "r") as infile:
     for line in infile:
         if line.startswith("!SPACE_GROUP_NUMBER="):
@@ -119,6 +133,7 @@ with open(dataline, "r") as infile:
             wavelen = words[-1]
             wavelen = float(wavelen)
 
+#decide onreflections per correction factor
 if sg <= 2:
     sym = 1
 if 3 <= sg <= 15:
@@ -133,11 +148,10 @@ if wavelen <= 3:
     wav = 1
 if wavelen > 3:
     wav = 2
-
 ref_corr_fact = sym * wav * quality * 3
 print("Using a reflection/correction factor of " + str(ref_corr_fact))
 
-# Write default XSCALE.INP commands -  can make this customisable in future
+# Write XSCALE.INP commands 
 defaults = (
     "OUTPUT_FILE=XSCALE.HKL",
     "RESOLUTION_SHELLS=" + str(shells),
@@ -153,7 +167,8 @@ if cut_or_comb == "c":
     print(lineprep)
     print(len(lineprep))
     print("")
-xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
+#xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
+
 # Loop through all combinations
 if cut_or_comb == "c":
     for size in range(2, len(lineprep) + 1):
@@ -165,8 +180,13 @@ if cut_or_comb == "c":
                 xscaleinp.write("\n")
             xscaleinp.write(toRun)
             xscaleinp.close()
+            ref = open("LIST_REF.OUT", "a")
+            ref.write(size + "\n")
+            ref.write(toRun + "\n")
             subprocess.run(["xscale_par"])
             xscalelp = open("XSCALE.LP", "r")
+            for j in reslist:
+                analyse("XSCALE.LP", j, size)
             xscaleout = open("XSCALEOUT.LP", "a")
             xscaleout.write(xscalelp.read())
             xscaleout.close()
