@@ -48,8 +48,8 @@ print(hkl_list)
 # Setup - probably a neater way of doing this...
 os.system("module load xds")
 path = os.getcwd()
-p = Path(path)
-os.system('find ' + str(p.parent) + ' "XDS_ASCII.HKL" -type f -not -path "*/\.*" | sort')
+#p = Path(path)
+#os.system('find ' + str(p.parent) + ' "XDS_ASCII.HKL" -type f -not -path "*/\.*" | sort')
 print("You are here: " + path)
 print( 
     """XZuiichi can test all possible (c)ombinations of the
