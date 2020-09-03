@@ -181,7 +181,7 @@ if cut_or_comb == "c":
             xscaleinp.write(toRun)
             xscaleinp.close()
             ref = open("LIST_REF.OUT", "a")
-            ref.write(size + "\n")
+            ref.write(str(size )+ "\n")
             ref.write(toRun + "\n")
             subprocess.run(["xscale_par"])
             xscalelp = open("XSCALE.LP", "r")
