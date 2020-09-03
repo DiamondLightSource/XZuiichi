@@ -25,7 +25,7 @@ def analyse(lp_file, res, name):
                 out.write(','.join(line.split()) + '\n')
     with open((os.path.join(path, 'tempout.csv')), 'r') as file:
         dataline = file.read().splitlines(True)
-    with open((os.path.join(path, name + '.csv')), 'a') as file:
+    with open((os.path.join(path, str(name) + '.csv')), 'a') as file:
         file.writelines(dataline[:1])
 
 
