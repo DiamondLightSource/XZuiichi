@@ -22,10 +22,10 @@ def analyse(lp_file, res, name):
     with open (lp_file, 'r') as file, open((os.path.join(path, 'tempout.csv')), 'w') as out:
         for line in file:
             if line.lstrip().startswith(str(res) + '0'):
-                out.write(','.join(line.split()) + '\n')
+                out.write(','.join(line.split()) + ',' + str(name) + '\n')
     with open((os.path.join(path, 'tempout.csv')), 'r') as file:
         dataline = file.read().splitlines(True)
-    with open((os.path.join(path, str(name) + '.csv')), 'a') as file:
+    with open((os.path.join(path, 'all.csv')), 'a') as file:
         file.writelines(dataline[:1])
 
 
@@ -51,7 +51,7 @@ path = os.getcwd()
 #p = Path(path)
 #os.system('find ' + str(p.parent) + ' "XDS_ASCII.HKL" -type f -not -path "*/\.*" | sort')
 print("You are here: " + path)
-print( 
+print(
     """XZuiichi can test all possible (c)ombinations of the
 data or systematically (r)emove them in reverse order
 to analyse where signal drops. Type c for the
