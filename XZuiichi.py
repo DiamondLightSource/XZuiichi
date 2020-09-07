@@ -188,6 +188,12 @@ if cut_or_comb == "c":
             xscalelp = open("XSCALE.LP", "r")
             for j in reslist:
                 analyse("XSCALE.LP", j, n)
+            with open((os.path.join(path, str(n) + '.csv')), 'r') as file:
+                data = file.read()
+                data = data.replace("%","")
+                data = data.replace("*","")
+            with open((os.path.join(path, str(n) + '.csv')), 'w') as file:
+                file.write(data)
             xscaleout = open("XSCALEOUT.LP", "a")
             xscaleout.write(xscalelp.read())
             xscaleout.close()
