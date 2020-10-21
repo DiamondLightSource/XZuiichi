@@ -224,3 +224,6 @@ if cut_or_comb == "r":
         xscaleinp.close()
     else:
         print("Processing finished")
+
+df = pd.read_csv('all.csv', index_col=[14])
+df
