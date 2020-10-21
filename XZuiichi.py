@@ -10,7 +10,8 @@ from itertools import combinations
 from pathlib import Path
 import pandas as pd
 import shutil
-
+import time
+os.system("module load global/cluster")
 
 # Python3 code to convert tuple into string
 def convertTuple(tup):
@@ -42,21 +43,28 @@ __   __ ______      _ _      _     _
               """
 )
 
+path = os.getcwd()
+print("Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n")
+hkl_list = list(Path("../").rglob("*.[H][K][L]"))
+for a in hkl_list:
+    print(os.path.join(path, a))
+
 # Setup - probably a neater way of doing this...
 os.system("module load xds")
 path = os.getcwd()
 #p = Path(path)
 #os.system('find ' + str(p.parent) + ' "XDS_ASCII.HKL" -type f -not -path "*/\.*" | sort')
-print("You are here: " + path)
+print("\nYou are here: " + path)
 print(
-    """XZuiichi can test all possible (c)ombinations of the
+    """\nXZuiichi can test all possible (c)ombinations of the
 data or systematically (r)emove them in reverse order
 to analyse where signal drops. Type c for the
 combination option (takes MUCH longer for lots of data
 sets, best not to include more than 14 as this will
 take weeks+). Type r for the systematic removal
-option. """
+option.\n"""
 )
+big_zuiichi = str(input("Big Zuiichi?! ")).lower()
 inpnumber = int(input("How many datasets are there? "))
 inpnumberstatic = inpnumber
 inpline = "INPUT_FILE="
@@ -150,7 +158,6 @@ print("Using a reflection/correction factor of " + str(ref_corr_fact))
 
 # Write XSCALE.INP commands 
 defaults = (
-    "OUTPUT_FILE=XSCALE.HKL",
     "RESOLUTION_SHELLS=" + str(shells),
     "FRIEDEL'S_LAW=FALSE",
     "REFLECTIONS/CORRECTION_FACTOR=" + str(ref_corr_fact),
@@ -167,7 +174,7 @@ if cut_or_comb == "c":
 #xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
 
 # Loop through all combinations
-if cut_or_comb == "c":
+if cut_or_comb == "c" and big_zuiichi != "y":
     n = 1
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
@@ -197,6 +204,24 @@ if cut_or_comb == "c":
     with open((os.path.join(path, 'all.csv')), 'w') as file:
         file.write(data)
 
+if cut_or_comb == "c" and big_zuiichi == "y":
+    n = 1
+    for size in range(2, len(lineprep) + 1):
+        for i in combinations(lineprep, size):
+            os.mkdir(str(n))
+            toRun = convertTuple(i)
+            xscaleinp = open("./"+ str(n) +"/XSCALE.INP", "w")
+            xscaleinp.write("OUTPUT_FILE=" + str(n) + ".HKL\n")
+            for line in defaults:
+                xscaleinp.write(line)
+                xscaleinp.write("\n")
+            xscaleinp.write(toRun)
+            xscaleinp.close()
+            shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
+            os.system("cd ./" + str(n) + "; qsub -P i23 -pe smp 10-40 -cwd xsp.sh")
+            time.sleep(2)
+            n = n + 1
+
 # XSCALE on input file and log output, delete last line of input file, repeat
 if cut_or_comb == "r":
     inpnumberline = inpnumber
@@ -224,6 +249,3 @@ if cut_or_comb == "r":
         xscaleinp.close()
     else:
         print("Processing finished")
-
-df = pd.read_csv('all.csv', index_col=[14])
-df
