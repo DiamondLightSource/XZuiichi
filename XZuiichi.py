@@ -42,9 +42,6 @@ __   __ ______      _ _      _     _
               """
 )
 
-hkl_list = list(Path("../").rglob("*.[H][K][L]"))
-print(hkl_list)
-
 # Setup - probably a neater way of doing this...
 os.system("module load xds")
 path = os.getcwd()
@@ -193,13 +190,12 @@ if cut_or_comb == "c":
             xscaleout.close()
             xscalelp.close()
             n = n + 1
-            
-with open((os.path.join(path, 'all.csv')), 'r') as file:
-    data = file.read()
-    data = data.replace("%","")
-    data = data.replace("*","")
-with open((os.path.join(path, 'all.csv')), 'w') as file:
-    file.write(data)
+    with open((os.path.join(path, 'all.csv')), 'r') as file:
+        data = file.read()
+        data = data.replace("%","")
+        data = data.replace("*","")
+    with open((os.path.join(path, 'all.csv')), 'w') as file:
+        file.write(data)
 
 # XSCALE on input file and log output, delete last line of input file, repeat
 if cut_or_comb == "r":
