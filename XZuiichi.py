@@ -158,6 +158,7 @@ print("Using a reflection/correction factor of " + str(ref_corr_fact))
 
 # Write XSCALE.INP commands 
 defaults = (
+    "OUTPUT_FILE=XSCALE.HKL",
     "RESOLUTION_SHELLS=" + str(shells),
     "FRIEDEL'S_LAW=FALSE",
     "REFLECTIONS/CORRECTION_FACTOR=" + str(ref_corr_fact),
@@ -173,7 +174,7 @@ if cut_or_comb == "c":
     print("")
 #xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
 
-# Loop through all combinations
+# Loop through all combinations - local machine
 if cut_or_comb == "c" and big_zuiichi != "y":
     n = 1
     for size in range(2, len(lineprep) + 1):
@@ -204,23 +205,47 @@ if cut_or_comb == "c" and big_zuiichi != "y":
     with open((os.path.join(path, 'all.csv')), 'w') as file:
         file.write(data)
 
+# loop through all combinations - science cluster BIG ZUIICHI!
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
-            os.mkdir(str(n))
+            path_to_del = os.path.join(path, str(n))
+            if os.path.exists(path_to_del):
+                shutil.rmtree(path_to_del)
+                print(path_to_del)
+            if not os.path.exists(str(n)):
+                os.mkdir(path_to_del)
             toRun = convertTuple(i)
             xscaleinp = open("./"+ str(n) +"/XSCALE.INP", "w")
-            xscaleinp.write("OUTPUT_FILE=" + str(n) + ".HKL\n")
             for line in defaults:
                 xscaleinp.write(line)
                 xscaleinp.write("\n")
             xscaleinp.write(toRun)
             xscaleinp.close()
             shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
-            os.system("cd ./" + str(n) + "; qsub -P i23 -pe smp 10-40 -cwd xsp.sh")
-            time.sleep(2)
+            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 10-40 -cwd xsp.sh")
+            #time.sleep(1)
             n = n + 1
+    q_fin = subprocess.run(["qstat"])
+    while q_fin != "":
+        q_fin = subprocess.run(["qstat"])
+    else:
+        print("Moving on to analysis...")
+
+if cut_or_comb == "c" and big_zuiichi == "y":
+    n = 1
+    for size in range(2, len(lineprep) + 1):
+        for i in combinations(lineprep, size):
+            for j in reslist:
+                analyse(str(n) + "/XSCALE.LP", j, n)
+            n = n + 1
+    with open((os.path.join(path, 'all.csv')), 'r') as file:
+        data = file.read()
+        data = data.replace("%","")
+        data = data.replace("*","")
+    with open((os.path.join(path, 'all.csv')), 'w') as file:
+        file.write(data)
 
 # XSCALE on input file and log output, delete last line of input file, repeat
 if cut_or_comb == "r":
