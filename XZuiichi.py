@@ -11,7 +11,9 @@ from pathlib import Path
 import pandas as pd
 import shutil
 import time
-os.system("module load global/cluster")
+import math as m
+from tqdm import tqdm
+os.system("module load global/cluster; module load xds")
 
 # Python3 code to convert tuple into string
 def convertTuple(tup):
@@ -65,7 +67,18 @@ take weeks+). Type r for the systematic removal
 option.\n"""
 )
 big_zuiichi = str(input("Big Zuiichi?! ")).lower()
-inpnumber = int(input("How many datasets are there? "))
+inpnumber = int(input("\nHow many datasets are there? "))
+
+combination = 0
+
+for r in range(2, inpnumber, 1):
+    x = (m.factorial(inpnumber) / (m.factorial(r) * (m.factorial((inpnumber - r)))))
+    combination = x + combination
+
+combination = combination + 1
+
+print("Based on " + str(inpnumber) + " input files, there are " + str(int(combination)) + " unique combinations of the data")
+
 inpnumberstatic = inpnumber
 inpline = "INPUT_FILE="
 cut_or_comb = "c"
@@ -105,7 +118,7 @@ print("")
 quality = int(
     input(
         """Score the diffraction quality 1-3
-                    (1 is bad, 2 is okay, 3 is amazing): """
+        (1 is bad, 2 is okay, 3 is amazing): """
     )
 )
 
@@ -126,7 +139,7 @@ while inpnumber > 0:
     xscalePrep.close()
 else:
     inpnumber = inpnumberstatic
-    print("That's all the inputs I am expecting!")
+    print("\nThat's all the inputs I am expecting!")
 with open(dataline, "r") as infile:
     for line in infile:
         if line.startswith("!SPACE_GROUP_NUMBER="):
@@ -154,7 +167,7 @@ if wavelen <= 3:
 if wavelen > 3:
     wav = 2
 ref_corr_fact = sym * wav * quality * 3
-print("Using a reflection/correction factor of " + str(ref_corr_fact))
+print("\nUsing a reflection/correction factor of " + str(ref_corr_fact))
 
 # Write XSCALE.INP commands 
 defaults = (
@@ -169,8 +182,6 @@ defaults = (
 if cut_or_comb == "c":
     xscalePrep = open("XSCALEPREP.INP")
     lineprep = xscalePrep.readlines()
-    print(lineprep)
-    print(len(lineprep))
     print("")
 #xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
 
@@ -208,12 +219,12 @@ if cut_or_comb == "c" and big_zuiichi != "y":
 # loop through all combinations - science cluster BIG ZUIICHI!
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
+    pbar = tqdm(desc="Submitting jobs", total=combination, dynamic_ncols=True)
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
             path_to_del = os.path.join(path, str(n))
             if os.path.exists(path_to_del):
                 shutil.rmtree(path_to_del)
-                print(path_to_del)
             if not os.path.exists(str(n)):
                 os.mkdir(path_to_del)
             toRun = convertTuple(i)
@@ -224,14 +235,24 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             xscaleinp.write(toRun)
             xscaleinp.close()
             shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
-            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 10-40 -cwd xsp.sh")
+            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 1-40 -cwd xsp.sh >/dev/null 2>&1")
             #time.sleep(1)
+            pbar.update(1)
+            pbar.refresh()
             n = n + 1
-    q_fin = subprocess.run(["qstat"])
-    while q_fin != "":
-        q_fin = subprocess.run(["qstat"])
+    q = subprocess.Popen("qstat", stdout=subprocess.PIPE)
+    q = len(q.stdout.read())
+    pbar = tqdm(desc="Jobs finished", total=(combination))
+    while q > 2:
+        t = subprocess.Popen("qstat", stdout=subprocess.PIPE)
+        q = len(t.stdout.readlines())
+        l = combination - (q - 2)
+        pbar.n = l
+        pbar.refresh()
+        time.sleep(1)
     else:
-        print("Moving on to analysis...")
+        time.sleep(1)
+        print("\nDone processing, moving on to analysis")
 
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
