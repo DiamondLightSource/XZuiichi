@@ -178,6 +178,13 @@ defaults = (
     "STRICT_ABSORPTION_CORRECTION=TRUE",
 )
 
+# Write script file for qsub
+xsp = (
+    "module load xds",
+    "xscale_par",
+    "rm *.cbf XZu* XSCALE.INP XSCALE.HKL xsp.sh",
+)
+
 # Prep input for permutations
 if cut_or_comb == "c":
     xscalePrep = open("XSCALEPREP.INP")
@@ -249,17 +256,18 @@ if cut_or_comb == "c" and big_zuiichi == "y":
         l = combination - (q - 2)
         pbar.n = int(l)
         pbar.refresh()
-        time.sleep(1)
     else:
-        time.sleep(1)
         print("\nDone processing, moving on to analysis")
 
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
+    pbar = tqdm(desc="Analysing", total=int(combination))
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
             for j in reslist:
                 analyse(str(n) + "/XSCALE.LP", j, n)
+            pbar.n = int(n -1)
+            pbar.refresh()
             n = n + 1
     with open((os.path.join(path, 'all.csv')), 'r') as file:
         data = file.read()
@@ -295,3 +303,12 @@ if cut_or_comb == "r":
         xscaleinp.close()
     else:
         print("Processing finished")
+
+# cleaning up folders if BIG zuiichi run
+if cut_or_comb == "c" and big_zuiichi == "y":
+    pbar = tqdm(desc="Cleaning up", total=int(combination))
+    for i in range(1, combination, 1)
+        path_to_del = os.path.join(path, str(i))
+        if os.path.exists(path_to_del):
+            shutil.rmtree(path_to_del)
+            pbar.refresh()
