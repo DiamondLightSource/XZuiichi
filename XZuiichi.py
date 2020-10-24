@@ -219,7 +219,7 @@ if cut_or_comb == "c" and big_zuiichi != "y":
 # loop through all combinations - science cluster BIG ZUIICHI!
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
-    pbar = tqdm(desc="Submitting jobs", total=combination, dynamic_ncols=True)
+    pbar = tqdm(desc="Submitting jobs", total=int(combination), dynamic_ncols=True)
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
             path_to_del = os.path.join(path, str(n))
@@ -235,19 +235,19 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             xscaleinp.write(toRun)
             xscaleinp.close()
             shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
-            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 1-40 -cwd xsp.sh >/dev/null 2>&1")
+            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 1-" + str(inpnumber) + " -cwd xsp.sh >/dev/null 2>&1")
             #time.sleep(1)
             pbar.update(1)
             pbar.refresh()
             n = n + 1
     q = subprocess.Popen("qstat", stdout=subprocess.PIPE)
     q = len(q.stdout.read())
-    pbar = tqdm(desc="Jobs finished", total=(combination))
+    pbar = tqdm(desc="Jobs finished", total=int(combination))   
     while q > 2:
         t = subprocess.Popen("qstat", stdout=subprocess.PIPE)
         q = len(t.stdout.readlines())
         l = combination - (q - 2)
-        pbar.n = l
+        pbar.n = int(l)
         pbar.refresh()
         time.sleep(1)
     else:
