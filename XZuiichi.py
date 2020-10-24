@@ -243,7 +243,6 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             xscaleinp.close()
             shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
             os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 2 -cwd xsp.sh >/dev/null 2>&1")
-            #time.sleep(1)
             pbar.update(1)
             pbar.refresh()
             n = n + 1
@@ -256,9 +255,11 @@ if cut_or_comb == "c" and big_zuiichi == "y":
         l = combination - (q - 2)
         pbar.n = int(l)
         pbar.refresh()
+        time.sleep(2)
     else:
         print("\nDone processing, moving on to analysis")
 
+# CURRENTLY GETS STUCK HERE
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
     pbar = tqdm(desc="Analysing", total=int(combination))
