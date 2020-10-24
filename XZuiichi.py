@@ -235,7 +235,7 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             xscaleinp.write(toRun)
             xscaleinp.close()
             shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
-            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 1-" + str(inpnumber) + " -cwd xsp.sh >/dev/null 2>&1")
+            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 2 -cwd xsp.sh >/dev/null 2>&1")
             #time.sleep(1)
             pbar.update(1)
             pbar.refresh()
