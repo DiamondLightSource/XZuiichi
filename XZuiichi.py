@@ -13,7 +13,7 @@ import shutil
 import time
 import math as m
 from tqdm import tqdm
-os.system("module load global/cluster; module load xds")
+os.system("module load global/cluster >/dev/null 2>&1; module load xds")
 
 # Python3 code to convert tuple into string
 def convertTuple(tup):
