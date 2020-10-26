@@ -83,7 +83,6 @@ inpnumberstatic = inpnumber
 inpline = "INPUT_FILE="
 cut_or_comb = "c"
 
-# Kill script if only one dataset to be given
 if inpnumber > 1:
     print("")
 else:
@@ -235,13 +234,18 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             if not os.path.exists(str(n)):
                 os.mkdir(path_to_del)
             toRun = convertTuple(i)
-            xscaleinp = open("./"+ str(n) +"/XSCALE.INP", "w")
+            xscaleinp = open("./" + str(n) + "/XSCALE.INP", "w")
             for line in defaults:
                 xscaleinp.write(line)
                 xscaleinp.write("\n")
             xscaleinp.write(toRun)
             xscaleinp.close()
-            shutil.copy("xsp.sh", "./" + str(n) + "/xsp.sh")
+            xsp_write = open("./" + str(n) + "/xsp.sh", "w")
+            for line in xsp:
+                xsp_write.write(line)
+                xsp.write.write("\n")
+            xsp_write.close()
+            os.chmod(os.path.join(path, str(n)) + "xsp.sh", 0O775)
             os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 2 -cwd xsp.sh >/dev/null 2>&1")
             pbar.update(1)
             pbar.refresh()
