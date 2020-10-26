@@ -47,7 +47,7 @@ __   __ ______      _ _      _     _
 
 path = os.getcwd()
 print("Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n")
-hkl_list = list(Path("../").rglob("*.[H][K][L]"))
+hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
 for a in hkl_list:
     print(os.path.join(path, a))
 
@@ -243,16 +243,17 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             xsp_write = open("./" + str(n) + "/xsp.sh", "w")
             for line in xsp:
                 xsp_write.write(line)
-                xsp.write.write("\n")
+                xsp_write.write("\n")
             xsp_write.close()
-            os.chmod(os.path.join(path, str(n)) + "xsp.sh", 0O775)
-            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 2 -cwd xsp.sh >/dev/null 2>&1")
+            os.chmod(os.path.join(path, str(n)) + "/xsp.sh", 0o775)
+            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 4 -cwd xsp.sh >/dev/null 2>&1")
             pbar.update(1)
             pbar.refresh()
             n = n + 1
     q = subprocess.Popen("qstat", stdout=subprocess.PIPE)
     q = len(q.stdout.read())
-    pbar = tqdm(desc="Jobs finished", total=int(combination))   
+    print("")
+    pbar = tqdm(desc="Jobs finished", total=int(combination), dynamic_ncols=True)   
     while q > 2:
         t = subprocess.Popen("qstat", stdout=subprocess.PIPE)
         q = len(t.stdout.readlines())
@@ -263,15 +264,15 @@ if cut_or_comb == "c" and big_zuiichi == "y":
     else:
         print("\nDone processing, moving on to analysis")
 
-# CURRENTLY GETS STUCK HERE
 if cut_or_comb == "c" and big_zuiichi == "y":
     n = 1
-    pbar = tqdm(desc="Analysing", total=int(combination))
+    print("")
+    pbar = tqdm(desc="Analysing", total=int(combination), dynamic_ncols=True)
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
             for j in reslist:
                 analyse(str(n) + "/XSCALE.LP", j, n)
-            pbar.n = int(n -1)
+            pbar.n = int(n)
             pbar.refresh()
             n = n + 1
     with open((os.path.join(path, 'all.csv')), 'r') as file:
@@ -311,9 +312,12 @@ if cut_or_comb == "r":
 
 # cleaning up folders if BIG zuiichi run
 if cut_or_comb == "c" and big_zuiichi == "y":
+    print("")
     pbar = tqdm(desc="Cleaning up", total=int(combination))
-    for i in range(1, combination, 1)
+    for i in range(1, int(combination) + 1, 1):
         path_to_del = os.path.join(path, str(i))
         if os.path.exists(path_to_del):
             shutil.rmtree(path_to_del)
             pbar.refresh()
+
+print("\nXZuiichi finished.")
