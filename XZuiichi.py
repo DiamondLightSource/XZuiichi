@@ -24,7 +24,7 @@ def convertTuple(tup):
 def analyse(lp_file, res, name):
     with open (lp_file, 'r') as file, open((os.path.join(path, 'tempout.csv')), 'w') as out:
         for line in file:
-            if line.lstrip().startswith(str(res) + '0'):
+            if line.lstrip().startswith(str(res) + '0 '):
                 out.write(','.join(line.split()) + ',' + str(name) + '\n')
     with open((os.path.join(path, 'tempout.csv')), 'r') as file:
         dataline = file.read().splitlines(True)
