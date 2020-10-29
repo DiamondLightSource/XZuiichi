@@ -14,13 +14,15 @@ data.columns = ['res', 'completeness', 'isigi', 'rmeas', 'cchalf', 'anomcorr', '
 data.set_index(['ident', 'res'], inplace=True)
 data.sort_index(inplace=True)
 
+sanity_pass = []
 for i in range(1, combinations, 1):
     for j in resshel:
         comp = data.loc[(i, j), 'completeness']
-        print(comp)
         isigi = data.loc[(i, j), 'isigi']
-        print(isigi)
         rmeas = data.loc[(i, j), 'rmeas']
-        print(rmeas)
         cchalf = data.loc[(i, j), 'cchalf']
-        print(cchalf)
+        if (comp > 80) and (isigi > 1) and (rmeas < 100) and (cchalf > 25):
+            sanity_pass += [(i, j)]
+        else:
+            print(i, j, ' did not pass sanity check')
+print(sanity_pass)
