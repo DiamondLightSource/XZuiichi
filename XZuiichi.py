@@ -50,12 +50,8 @@ print("Finding .HKL files nearby (../). If you don't see what you were expecting
 hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
 for a in hkl_list:
     print(os.path.join(path, a))
-
-# Setup - probably a neater way of doing this...
 os.system("module load xds")
 path = os.getcwd()
-#p = Path(path)
-#os.system('find ' + str(p.parent) + ' "XDS_ASCII.HKL" -type f -not -path "*/\.*" | sort')
 print("\nYou are here: " + path)
 print(
     """\nXZuiichi can test all possible (c)ombinations of the
