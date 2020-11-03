@@ -347,18 +347,23 @@ for k in reslist:
     except:
         print('No data at', k, 'A passed the sanity check.')
 
-print(best_results)
-
 x_val = [x[0] for x in best_results]
 y_val = [x[1] for x in best_results]
 c_val = [x[2] for x in best_results]
-
 fig, ax = plt.subplots(1,1)
 ax.scatter(x_val, y_val, c=cm.Spectral([i * 10 for i in c_val]))
 ax.plot(x_val, y_val, 'b-')
 plt.axhline(y=9, color='r', linestyle='--')
 ax.invert_xaxis()
 plt.show()
+fig.savefig('ResolutionVsAnomcorr.jpg', dpi=600)
+
+best_run = mode(c_val)
+print('\nThe best run appears to be number', best_run)
+
+os.mkdir(path + 'best')
+shutil.copy2(os.path.join(path, best_run) + '/XSCALE.INP', os.path.join(path, 'best'))
+subprocess.run(["xscale_par"], cwd=os.path.join(path, 'best'))
 
 if cut_or_comb == "c" and big_zuiichi == "y":
     print("")
@@ -369,4 +374,4 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             shutil.rmtree(path_to_del)
             pbar.refresh()
 
-print("\nXZuiichi finished.")
+print("\nXZuiichi finished. Best data can be found in the folder 'best'")

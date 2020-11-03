@@ -60,6 +60,7 @@ ax.plot(x_val, y_val, 'b-')
 plt.axhline(y=9, color='r', linestyle='--')
 ax.invert_xaxis()
 plt.show()
+fig.savefig('ResolutionVsAnomcorr.jpg', dpi=600)
 
 best_run = mode(c_val)
-print('The best run appears to be number', best_run)
+print('\nThe best run appears to be number', best_run)
