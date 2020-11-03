@@ -368,7 +368,7 @@ best_run = mode(c_val)
 print('\nThe best run appears to be number', best_run)
 
 os.mkdir(path + 'best')
-shutil.copy2(os.path.join(path, best_run) + '/XSCALE.INP', os.path.join(path, 'best'))
+shutil.copy2(os.path.join(path, str(best_run)) + '/XSCALE.INP', os.path.join(path, 'best'))
 subprocess.run(["xscale_par"], cwd=os.path.join(path, 'best'))
 
 if cut_or_comb == "c" and big_zuiichi == "y":
