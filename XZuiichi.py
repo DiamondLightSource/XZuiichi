@@ -23,7 +23,7 @@ os.system("module load global/cluster >/dev/null 2>&1; module load xds")
 if os.path.exists('all.csv'):
     os.remove('all.csv')
 else:
-    continue
+    pass
 
 # Python3 code to convert tuple into string
 def convertTuple(tup):
