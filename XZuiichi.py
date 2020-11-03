@@ -323,7 +323,7 @@ for i in range(1, int(combination), 1):
         rmeas = data.loc[(i, j), 'rmeas']
         cchalf = data.loc[(i, j), 'cchalf']
         ac = data.loc[(i, j), 'anomcorr']
-        if (comp > 80) and (isigi > 1) and (rmeas < 100) and (cchalf > 25):
+        if (comp > 80) & (isigi > 1) & (rmeas < 100) & (cchalf > 25):
             sanity_pass += [(i, j, ac)]
         else:
             continue
