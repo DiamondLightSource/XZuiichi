@@ -316,7 +316,7 @@ data.set_index(['ident', 'res'], inplace=True)
 data.sort_index(inplace=True)
 
 sanity_pass = []
-for i in range(1, combinations, 1):
+for i in range(1, combination, 1):
     for j in reslist:
         comp = data.loc[(i, j), 'completeness']
         isigi = data.loc[(i, j), 'isigi']
