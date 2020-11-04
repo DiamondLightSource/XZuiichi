@@ -35,6 +35,7 @@ def analyse(lp_file, res, name):
     with open (lp_file, 'r') as file, open((os.path.join(path, 'tempout.csv')), 'w') as out:
         for line in file:
             if line.lstrip().startswith(str(res) + '0 '):
+                line = line[0:51] + ' ' + line[51:62] + ' ' + line[62:89] + ' ' + line[89:]
                 out.write(','.join(line.split()) + ',' + str(name) + '\n')
     with open((os.path.join(path, 'tempout.csv')), 'r') as file:
         dataline = file.read().splitlines(True)
