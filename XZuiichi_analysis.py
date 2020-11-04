@@ -10,13 +10,17 @@ from statistics import mode
 
 path = os.getcwd()
 print(path)
-combinations = 26
-reslist = [10.00, 5.00, 4.70, 4.50, 4.20, 3.90, 3.60, 3.40, 3.10, 2.80, 2.50, 2.30, 2.00]
+combinations = 131054
+reslist = [10.00, 5.00, 4.80, 4.50, 4.30, 4.10, 3.80, 3.60, 3.30, 3.10, 2.90, 2.60, 2.40]
 
-data = pd.read_csv("all.csv", header=None, engine='c', usecols=[0, 4, 8, 9, 10, 11, 12, 13, 14])
+data = pd.read_csv("all.csv", header=None, usecols=[0, 4, 8, 9, 10, 11, 12, 13, 14], low_memory=False)
+data.fillna(0, inplace=True)
 data.columns = ['res', 'completeness', 'isigi', 'rmeas', 'cchalf', 'anomcorr', 'sigano', 'nano', 'ident']
 data.set_index(['ident', 'res'], inplace=True)
 data.sort_index(inplace=True)
+
+
+print(data)
 
 sanity_pass = []
 for i in range(1, combinations, 1):
@@ -26,7 +30,7 @@ for i in range(1, combinations, 1):
         rmeas = data.loc[(i, j), 'rmeas']
         cchalf = data.loc[(i, j), 'cchalf']
         ac = data.loc[(i, j), 'anomcorr']
-        if (comp > 80) and (isigi > 1) and (rmeas < 100) and (cchalf > 25):
+        if (comp > 80) & (isigi > 1) & (rmeas < 100) & (cchalf > 25):
             sanity_pass += [(i, j, ac)]
         else:
             continue
