@@ -235,25 +235,26 @@ if cut_or_comb == "c" and big_zuiichi == "y":
     pbar = tqdm(desc="Submitting jobs", total=int(combination), dynamic_ncols=True)
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
-            path_to_del = os.path.join(path, str(n))
-            if os.path.exists(path_to_del):
-                shutil.rmtree(path_to_del)
-            if not os.path.exists(str(n)):
-                os.mkdir(path_to_del)
-            toRun = convertTuple(i)
-            xscaleinp = open("./" + str(n) + "/XSCALE.INP", "w")
-            for line in defaults:
-                xscaleinp.write(line)
-                xscaleinp.write("\n")
-            xscaleinp.write(toRun)
-            xscaleinp.close()
-            xsp_write = open("./" + str(n) + "/xsp.sh", "w")
-            for line in xsp:
-                xsp_write.write(line)
-                xsp_write.write("\n")
-            xsp_write.close()
+            #path_to_del = os.path.join(path, str(n))
+            #if os.path.exists(path_to_del):
+                #shutil.rmtree(path_to_del)
+            #if not os.path.exists(str(n)):
+                #os.mkdir(path_to_del)
+            #toRun = convertTuple(i)
+            #xscaleinp = open("./" + str(n) + "/XSCALE.INP", "w")
+            #for line in defaults:
+                #xscaleinp.write(line)
+                #xscaleinp.write("\n")
+            #xscaleinp.write(toRun)
+            #xscaleinp.close()
+            #xsp_write = open("./" + str(n) + "/xsp.sh", "w")
+            #for line in xsp:
+                #xsp_write.write(line)
+                #xsp_write.write("\n")
+            #xsp_write.close()
             #os.chmod(os.path.join(path, str(n)) + "/xsp.sh", 0o775)
             #os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 4 -cwd xsp.sh >/dev/null 2>&1")
+            print(i)
             pbar.update(1)
             pbar.refresh()
             n = n + 1
