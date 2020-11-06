@@ -58,9 +58,9 @@ __   __ ______      _ _      _     _
 
 path = os.getcwd()
 print("Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n")
-hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
-for a in hkl_list:
-    print(os.path.join(path, a))
+#hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
+#for a in hkl_list:
+    #print(os.path.join(path, a))
 os.system("module load xds")
 path = os.getcwd()
 print("\nYou are here: " + path)
