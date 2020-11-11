@@ -254,7 +254,6 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             xsp_write.close()
             os.chmod(os.path.join(path, str(n)) + "/xsp.sh", 0o775)
             os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 4 -cwd xsp.sh >/dev/null 2>&1")
-            print(i)
             pbar.update(1)
             pbar.refresh()
             n = n + 1
