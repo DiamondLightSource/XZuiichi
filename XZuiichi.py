@@ -18,10 +18,11 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from operator import itemgetter
 from statistics import mode
+
 os.system("module load global/cluster >/dev/null 2>&1; module load xds")
 
-if os.path.exists('all.csv'):
-    os.remove('all.csv')
+if os.path.exists("all.csv"):
+    os.remove("all.csv")
 else:
     pass
 
@@ -32,14 +33,18 @@ def convertTuple(tup):
 
 
 def analyse(lp_file, res, name):
-    with open (lp_file, 'r') as file, open((os.path.join(path, 'tempout.csv')), 'w') as out:
+    with open(lp_file, "r") as file, open(
+        (os.path.join(path, "tempout.csv")), "w"
+    ) as out:
         for line in file:
-            if line.lstrip().startswith(str(res) + '0 '):
-                line = line[0:51] + ' ' + line[51:62] + ' ' + line[62:89] + ' ' + line[89:]
-                out.write(','.join(line.split()) + ',' + str(name) + '\n')
-    with open((os.path.join(path, 'tempout.csv')), 'r') as file:
+            if line.lstrip().startswith(str(res) + "0 "):
+                line = (
+                    line[0:51] + " " + line[51:62] + " " + line[62:89] + " " + line[89:]
+                )
+                out.write(",".join(line.split()) + "," + str(name) + "\n")
+    with open((os.path.join(path, "tempout.csv")), "r") as file:
         dataline = file.read().splitlines(True)
-    with open((os.path.join(path, 'all.csv')), 'a') as file:
+    with open((os.path.join(path, "all.csv")), "a") as file:
         file.writelines(dataline[:1])
 
 
@@ -57,7 +62,9 @@ __   __ ______      _ _      _     _
 )
 
 path = os.getcwd()
-print("Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n")
+print(
+    "Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n"
+)
 hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
 for a in hkl_list:
     print(os.path.join(path, a))
@@ -79,12 +86,18 @@ inpnumber = int(input("\nHow many datasets are there? "))
 combination = 0
 
 for r in range(2, inpnumber, 1):
-    x = (m.factorial(inpnumber) / (m.factorial(r) * (m.factorial((inpnumber - r)))))
+    x = m.factorial(inpnumber) / (m.factorial(r) * (m.factorial((inpnumber - r))))
     combination = x + combination
 
 combination = combination + 1
 
-print("Based on " + str(inpnumber) + " input files, there are " + str(int(combination)) + " unique combinations of the data")
+print(
+    "Based on "
+    + str(inpnumber)
+    + " input files, there are "
+    + str(int(combination))
+    + " unique combinations of the data"
+)
 
 inpnumberstatic = inpnumber
 inpline = "INPUT_FILE="
@@ -112,8 +125,45 @@ res1, res2, res3, res4, res5, res6, res7, res8, res9, res10, res11, res12, res13
     round((res + resgaps), 1),
     round(res, 1),
 )
-reslist = [res1, res2, res3, res4, res5, res6, res7, res8, res9, res10, res11, res12, res13]
-shells = ("10 5 " + str(res3) + " " + str(res4) + " " + str(res5) + " " + str(res6) + " " + str(res7) + " " + str(res8) + " " + str(res9) + " " + str(res10) + " " + str(res11) + " " + str(res12) + " " + str(res13))
+reslist = [
+    res1,
+    res2,
+    res3,
+    res4,
+    res5,
+    res6,
+    res7,
+    res8,
+    res9,
+    res10,
+    res11,
+    res12,
+    res13,
+]
+shells = (
+    "10 5 "
+    + str(res3)
+    + " "
+    + str(res4)
+    + " "
+    + str(res5)
+    + " "
+    + str(res6)
+    + " "
+    + str(res7)
+    + " "
+    + str(res8)
+    + " "
+    + str(res9)
+    + " "
+    + str(res10)
+    + " "
+    + str(res11)
+    + " "
+    + str(res12)
+    + " "
+    + str(res13)
+)
 print(
     "Because you gave a resolution of "
     + str(res)
@@ -157,7 +207,7 @@ with open(dataline, "r") as infile:
             wavelen = words[-1]
             wavelen = float(wavelen)
 
-#decide onreflections per correction factor
+# decide onreflections per correction factor
 if sg <= 2:
     sym = 1
 if 3 <= sg <= 15:
@@ -175,7 +225,7 @@ if wavelen > 3:
 ref_corr_fact = sym * wav * quality * 3
 print("\nUsing a reflection/correction factor of " + str(ref_corr_fact))
 
-# Write XSCALE.INP commands 
+# Write XSCALE.INP commands
 defaults = (
     "OUTPUT_FILE=XSCALE.HKL",
     "RESOLUTION_SHELLS=" + str(shells),
@@ -196,7 +246,6 @@ if cut_or_comb == "c":
     xscalePrep = open("XSCALEPREP.INP")
     lineprep = xscalePrep.readlines()
     print("")
-#xs_df = pd.DataFrame(columns=('Resolution', 'ObsRef', 'UniRef', 'PosRef', 'Completeness', 'RObs', 'RExp', 'Compared', 'ISigI', 'RMeas', 'CCHalf', 'AnomCorr', 'SigAno', 'NAno'))
 
 # Loop through all combinations - local machine
 if cut_or_comb == "c" and big_zuiichi != "y":
@@ -211,7 +260,7 @@ if cut_or_comb == "c" and big_zuiichi != "y":
             xscaleinp.write(toRun)
             xscaleinp.close()
             ref = open("LIST_REF.OUT", "a")
-            ref.write(str(n)+ "\n")
+            ref.write(str(n) + "\n")
             ref.write(toRun + "\n")
             subprocess.run(["xscale_par"])
             xscalelp = open("XSCALE.LP", "r")
@@ -222,11 +271,11 @@ if cut_or_comb == "c" and big_zuiichi != "y":
             xscaleout.close()
             xscalelp.close()
             n = n + 1
-    with open((os.path.join(path, 'all.csv')), 'r') as file:
+    with open((os.path.join(path, "all.csv")), "r") as file:
         data = file.read()
-        data = data.replace("%","")
-        data = data.replace("*","")
-    with open((os.path.join(path, 'all.csv')), 'w') as file:
+        data = data.replace("%", "")
+        data = data.replace("*", "")
+    with open((os.path.join(path, "all.csv")), "w") as file:
         file.write(data)
 
 # loop through all combinations - science cluster BIG ZUIICHI!
@@ -253,14 +302,20 @@ if cut_or_comb == "c" and big_zuiichi == "y":
                 xsp_write.write("\n")
             xsp_write.close()
             os.chmod(os.path.join(path, str(n)) + "/xsp.sh", 0o775)
-            os.system("cd ./" + str(n) + "; qsub -P i23 -N XZu_" + str(n) + " -pe smp 4 -cwd xsp.sh >/dev/null 2>&1")
+            os.system(
+                "cd ./"
+                + str(n)
+                + "; qsub -P i23 -N XZu_"
+                + str(n)
+                + " -pe smp 4 -cwd xsp.sh >/dev/null 2>&1"
+            )
             pbar.update(1)
             pbar.refresh()
             n = n + 1
     q = subprocess.Popen("qstat", stdout=subprocess.PIPE)
     q = len(q.stdout.read())
     print("")
-    pbar = tqdm(desc="Jobs finished", total=int(combination), dynamic_ncols=True)   
+    pbar = tqdm(desc="Jobs finished", total=int(combination), dynamic_ncols=True)
     while q > 2:
         t = subprocess.Popen("qstat", stdout=subprocess.PIPE)
         q = len(t.stdout.readlines())
@@ -282,11 +337,11 @@ if cut_or_comb == "c" and big_zuiichi == "y":
             pbar.n = int(n)
             pbar.refresh()
             n = n + 1
-    with open((os.path.join(path, 'all.csv')), 'r') as file:
+    with open((os.path.join(path, "all.csv")), "r") as file:
         data = file.read()
-        data = data.replace("%","")
-        data = data.replace("*","")
-    with open((os.path.join(path, 'all.csv')), 'w') as file:
+        data = data.replace("%", "")
+        data = data.replace("*", "")
+    with open((os.path.join(path, "all.csv")), "w") as file:
         file.write(data)
 
 # XSCALE on input file and log output, delete last line of input file, repeat
@@ -317,19 +372,31 @@ if cut_or_comb == "r":
     else:
         print("Processing finished")
 
-data = pd.read_csv("all.csv", header=None, engine='c', usecols=[0, 4, 8, 9, 10, 11, 12, 13, 14])
-data.columns = ['res', 'completeness', 'isigi', 'rmeas', 'cchalf', 'anomcorr', 'sigano', 'nano', 'ident']
-data.set_index(['ident', 'res'], inplace=True)
+data = pd.read_csv(
+    "all.csv", header=None, engine="c", usecols=[0, 4, 8, 9, 10, 11, 12, 13, 14]
+)
+data.columns = [
+    "res",
+    "completeness",
+    "isigi",
+    "rmeas",
+    "cchalf",
+    "anomcorr",
+    "sigano",
+    "nano",
+    "ident",
+]
+data.set_index(["ident", "res"], inplace=True)
 data.sort_index(inplace=True)
 
 sanity_pass = []
 for i in range(1, int(combination), 1):
     for j in reslist:
-        comp = data.loc[(i, j), 'completeness']
-        isigi = data.loc[(i, j), 'isigi']
-        rmeas = data.loc[(i, j), 'rmeas']
-        cchalf = data.loc[(i, j), 'cchalf']
-        ac = data.loc[(i, j), 'anomcorr']
+        comp = data.loc[(i, j), "completeness"]
+        isigi = data.loc[(i, j), "isigi"]
+        rmeas = data.loc[(i, j), "rmeas"]
+        cchalf = data.loc[(i, j), "cchalf"]
+        ac = data.loc[(i, j), "anomcorr"]
         if (comp > 80) & (isigi > 1) & (rmeas < 100) & (cchalf > 25):
             sanity_pass += [(i, j, ac)]
         else:
@@ -340,37 +407,54 @@ id, res, ano = 0, 1, 2
 best_results = []
 for k in reslist:
     m = []
-    for l in ( x for x in sanity_pass if x[1] == k ):
+    for l in (x for x in sanity_pass if x[1] == k):
         m += [(l)]
     try:
         ds = max(m, key=itemgetter(2))[0]
         bestano = max(m, key=itemgetter(2))[2]
         if bestano > 10:
-            print('To a resolution of', k , 'the best run is', ds, 'with an anomcorr of', bestano)
+            print(
+                "To a resolution of",
+                k,
+                "the best run is",
+                ds,
+                "with an anomcorr of",
+                bestano,
+            )
             best_results += [(k, bestano, ds)]
         else:
-            print('To a resolution of', k , 'the best run is', ds, 'but this has an anomcorr of', bestano, 'which indicates this may not be suitable for phasing.')
+            print(
+                "To a resolution of",
+                k,
+                "the best run is",
+                ds,
+                "but this has an anomcorr of",
+                bestano,
+                "which indicates this may not be suitable for phasing.",
+            )
             best_results += [(k, bestano, ds)]
     except:
-        print('No data at', k, 'A passed the sanity check.')
+        print("No data at", k, "A passed the sanity check.")
 
 x_val = [x[0] for x in best_results]
 y_val = [x[1] for x in best_results]
 c_val = [x[2] for x in best_results]
-fig, ax = plt.subplots(1,1)
+fig, ax = plt.subplots(1, 1)
 ax.scatter(x_val, y_val, c=cm.Spectral([i * 10 for i in c_val]))
-ax.plot(x_val, y_val, 'b-')
-plt.axhline(y=9, color='r', linestyle='--')
+ax.plot(x_val, y_val, "b-")
+plt.axhline(y=9, color="r", linestyle="--")
 ax.invert_xaxis()
 plt.show()
-fig.savefig('ResolutionVsAnomcorr.jpg', dpi=600)
+fig.savefig("ResolutionVsAnomcorr.jpg", dpi=600)
 
 best_run = mode(c_val)
-print('\nThe best run appears to be number', best_run)
+print("\nThe best run appears to be number", best_run)
 
-os.mkdir('best')
-shutil.copy2(os.path.join(path, str(best_run)) + '/XSCALE.INP', os.path.join(path, 'best'))
-subprocess.run(["xscale_par"], cwd=os.path.join(path, 'best'))
+os.mkdir("best")
+shutil.copy2(
+    os.path.join(path, str(best_run)) + "/XSCALE.INP", os.path.join(path, "best")
+)
+subprocess.run(["xscale_par"], cwd=os.path.join(path, "best"))
 
 if cut_or_comb == "c" and big_zuiichi == "y":
     print("")
