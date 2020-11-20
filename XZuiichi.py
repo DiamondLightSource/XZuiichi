@@ -291,8 +291,8 @@ if cut_or_comb == "c" and big_zuiichi == "y":
                 os.mkdir(path_to_del)
             toRun = convertTuple(i)
             with open("LIST_REF.OUT", 'a') as out:
-                out.write("Run", n, "\n")
-                out.write(toRun, "\n")
+                out.write("Run" + str(n) + "\n")
+                out.write(toRun + "\n")
             xscaleinp = open("./" + str(n) + "/XSCALE.INP", "w")
             for line in defaults:
                 xscaleinp.write(line)
