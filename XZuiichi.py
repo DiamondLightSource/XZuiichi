@@ -60,12 +60,24 @@ __   __ ______      _ _      _     _
               C ORR 2019
               """
 )
+nearbyfiles = str(input('Look for files (n)earby or give (s)pecific directory to look in?' )).lower()
+if nearbyfiles == 's':
+    searchpath = input('Path to search for HKL files in (output from pwd, will look in all child dir): ')
 
 path = os.getcwd()
-print(
-    "Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n"
-)
-hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
+
+if nearbyfiles != 's':
+    print(
+        "Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n"
+    )
+    hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
+
+if nearbyfiles == 's':
+    print(
+        "Finding .HKL files in " + str(searchpath) + "\n"
+    )
+    hkl_list = list(Path(searchpath).rglob("*[A][S][C][I][I].[H][K][L]"))
+
 for a in hkl_list:
     print(os.path.join(path, a))
 os.system("module load xds")
