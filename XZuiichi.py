@@ -65,21 +65,22 @@ if nearbyfiles == 's':
     searchpath = input('Path to search for HKL files in (output from pwd, will look in all child dir): ')
 
 path = os.getcwd()
+analysismode = str(input("Analsysis only? (y/n) ")).lower()
 
-if nearbyfiles != 's':
+if nearbyfiles != 's' and analysismode == 'n':
     print(
         "Finding .HKL files nearby (../). If you don't see what you were expecting, try running XZuiichi up a directory\n"
     )
     hkl_list = list(Path("../").rglob("*[A][S][C][I][I].[H][K][L]"))
 
-if nearbyfiles == 's':
+if nearbyfiles == 's' and analysismode == 'n':
     print(
         "Finding .HKL files in " + str(searchpath) + "\n"
     )
     hkl_list = list(Path(searchpath).rglob("*[A][S][C][I][I].[H][K][L]"))
-
-for a in hkl_list:
-    print(os.path.join(path, a))
+if analysismode == 'n':
+    for a in hkl_list:
+        print(os.path.join(path, a))
 os.system("module load xds")
 path = os.getcwd()
 print("\nYou are here: " + path)
@@ -94,7 +95,6 @@ option.\n"""
 )
 big_zuiichi = str(input("Big Zuiichi?! ")).lower()
 inpnumber = int(input("\nHow many datasets are there? "))
-
 combination = 0
 
 for r in range(2, inpnumber, 1):
@@ -260,7 +260,7 @@ if cut_or_comb == "c":
     print("")
 
 # Loop through all combinations - local machine
-if cut_or_comb == "c" and big_zuiichi != "y":
+if cut_or_comb == "c" and big_zuiichi != "y" and analysismode == "n":
     n = 1
     for size in range(2, len(lineprep) + 1):
         for i in combinations(lineprep, size):
@@ -291,7 +291,7 @@ if cut_or_comb == "c" and big_zuiichi != "y":
         file.write(data)
 
 # loop through all combinations - science cluster BIG ZUIICHI!
-if cut_or_comb == "c" and big_zuiichi == "y":
+if cut_or_comb == "c" and big_zuiichi == "y" and analysimode == "n":
     n = 1
     pbar = tqdm(desc="Submitting jobs", total=int(combination), dynamic_ncols=True)
     for size in range(2, len(lineprep) + 1):
