@@ -84,15 +84,6 @@ if analysismode == 'n':
 os.system("module load xds")
 path = os.getcwd()
 print("\nYou are here: " + path)
-print(
-    """\nXZuiichi can test all possible (c)ombinations of the
-data or systematically (r)emove them in reverse order
-to analyse where signal drops. Type c for the
-combination option (takes MUCH longer for lots of data
-sets, best not to include more than 14 as this will
-take weeks+). Type r for the systematic removal
-option.\n"""
-)
 big_zuiichi = str(input("Big Zuiichi?! ")).lower()
 inpnumber = int(input("\nHow many datasets are there? "))
 combination = 0
