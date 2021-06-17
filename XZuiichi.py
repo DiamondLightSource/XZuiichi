@@ -282,7 +282,7 @@ if cut_or_comb == "c" and big_zuiichi != "y" and analysismode == "n":
         file.write(data)
 
 # loop through all combinations - science cluster BIG ZUIICHI!
-if cut_or_comb == "c" and big_zuiichi == "y" and analysimode == "n":
+if cut_or_comb == "c" and big_zuiichi == "y" and analysismode == "n":
     n = 1
     pbar = tqdm(desc="Submitting jobs", total=int(combination), dynamic_ncols=True)
     for size in range(2, len(lineprep) + 1):
