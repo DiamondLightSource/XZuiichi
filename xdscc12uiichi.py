@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 @author: christianorr
 """
@@ -26,7 +27,7 @@ class best:
     def get_input(self):
         print("You are here:", self.path)
         searchpath = input("Where to search for HKL files (abs or rel): ")
-        hkl_list = list(Path(searchpath).rglob("*[I].[H][K][L]"))
+        hkl_list = list(Path(searchpath).rglob("*.[H][K][L]"))
         print("Found", len(hkl_list), "files")
         for a in hkl_list:
             print(a)
@@ -191,7 +192,8 @@ class best:
 
     def run_xscale_par(self):
         print("Running initial XSCALE")
-        subprocess.run(["xscale_par"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        #subprocess.run(["xscale_par"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["xscale_par"])
 
     def xdscc12_ify(self):
         print("Running xdscc12")
