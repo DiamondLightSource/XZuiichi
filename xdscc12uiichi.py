@@ -225,7 +225,10 @@ class best:
                 lines = infile.readlines()
             with open("XSCALE.INP", "w") as infile:
                 infile.writelines([line for line in lines[:-1]])
-            self.n +=1
+            with open("LIST_REF.OUT", "a") as infile:
+                infile.write("\nRun " + str(self.n) + "\n")
+                infile.writelines([line for line in lines[:-1]])
+            self.n += 1
         with open((os.path.join(self.path, "all.csv")), "r") as file:
             data = file.read()
             data = data.replace("%", "")
